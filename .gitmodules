@@ -1,0 +1,12 @@
+[submodule "external/libbcrypt"]
+	path = external/libbcrypt
+	url = https://github.com/trusch/libbcrypt
+[submodule "external/jwt-cpp"]
+	path = external/jwt-cpp
+	url = https://github.com/Thalhammer/jwt-cpp
+[submodule "external/jsoncpp"]
+	path = external/jsoncpp
+	url = https://github.com/open-source-parsers/jsoncpp
+[submodule "external/drogon"]
+	path = external/drogon
+	url = https://github.com/drogonframework/drogon

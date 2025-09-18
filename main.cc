@@ -1,9 +1,10 @@
 #include <drogon/drogon.h>
-using namespace drogon;
-int main() {
-    app()
-        .loadConfigFile("./config.json")
-        .run();
 
+int main() {
+    LOG_DEBUG << "Load config file";
+    drogon::app().loadConfigFile("../config.json");
+
+    LOG_DEBUG << "Running on http://localhost:4000";
+    drogon::app().run();
     return EXIT_SUCCESS;
 }
