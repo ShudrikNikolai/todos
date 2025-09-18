@@ -18,5 +18,12 @@ set(SRC_FILES
 # Create executable
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 
+aux_source_directory(controllers CTL_SRC)
+
+target_sources(${PROJECT_NAME}
+               PRIVATE
+               ${SRC_DIR}
+               ${CTL_SRC})
+
 # Link Drogon
 target_link_libraries(${PROJECT_NAME} Drogon::Drogon)

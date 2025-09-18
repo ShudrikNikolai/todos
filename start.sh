@@ -4,3 +4,4 @@ mkdir build
 cd ./build
 cmake ..
 make
+./todo_backend

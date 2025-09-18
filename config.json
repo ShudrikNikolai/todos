@@ -18,20 +18,10 @@
   "listeners": [
     {
       "address": "0.0.0.0",
-      "port": 8080,
+      "port": 4000,
       "https": false
     }
   ],
-  "ssl": {
-    "cert": "",
-    "key": "",
-    "conf": [
-      [
-        "Options",
-        "Compression"
-      ]
-    ]
-  },
   "thread_num": 4,
   "document_root": "./",
   "upload_path": "./uploads",
