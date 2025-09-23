@@ -9,7 +9,7 @@ void Users::login(const HttpRequestPtr &req,
                std::string &&userId,
                const std::string &passwd)
 {
-    LOG_DEBUG<<"User "<<userId<<" login";
+    //LOG_DEBUG<<"User "<<userId<<" login";
     //Authentication algorithm, read database, verify, identify, etc...
     //...
     Json::Value ret;
@@ -24,14 +24,14 @@ void Users::me(const HttpRequestPtr &req,
                    std::string userId,
                    const std::string &token) const
 {
-    LOG_DEBUG<<"User "<<userId<<" get his information";
+    //LOG_DEBUG<<"User "<<userId<<" get his information";
 
     //Verify the validity of the token, etc.
     //Read the database or cache to get user information
     Json::Value ret;
     ret["result"]="ok";
     ret["user_name"]="Jack";
-    ret["user_id"]=userId;
+    ret["user_id"]="userId";
     ret["gender"]=1;
     auto resp=HttpResponse::newHttpJsonResponse(ret);
     callback(resp);
