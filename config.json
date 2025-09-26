@@ -6,6 +6,16 @@
             "https": false
         }
     ],
+    "db_clients": [
+            {
+                "name": "default",
+                "rdbms": "sqlite3",
+                "dbname": "drogon_todo.db",
+                "connection_number": 5,
+                "timeout": 30
+            }
+        ]
+    ,
     "app": {
       "number_of_threads": 16
     }

@@ -1,0 +1,12 @@
+{
+  "rdbms": "sqlite3",
+  "filename": "drogon_todo",
+  "tables": [
+    "users",
+    "todos"
+  ],
+  "relationships": {
+    "enabled": false,
+    "items": []
+  }
+}
