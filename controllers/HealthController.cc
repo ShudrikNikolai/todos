@@ -1,6 +1,6 @@
 #include "HealthController.h"
 
-void HealthController::health(const HttpRequestPtr& req, std::function<void(const HttpResponsePtr&)>&&callback)
+void HealthController::health(const HttpRequestPtr& req, std::function<void(const HttpResponsePtr&)>&& callback)
 {
     Json::Value ret;
     ret["result"] = "ok";

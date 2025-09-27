@@ -1,12 +1,24 @@
 {
-  "rdbms": "sqlite3",
-  "filename": "drogon_todo",
-  "tables": [
-    "users",
-    "todos"
-  ],
+  "rdbms": "postgresql",
+  "host": "127.0.0.1",
+  "port": 5432,
+  "dbname": "drogon",
+  "schema": "public",
+  "user": "lstfng",
+  "password": "lstfng",
   "relationships": {
     "enabled": false,
-    "items": []
+    "items": [
+            {
+                "type": "has many",
+                "original_table_name": "users",
+                "original_table_alias": "user",
+                "original_key": "id",
+                "target_table_name": "todos",
+                "target_table_alias": "todo",
+                "target_key": "user_id",
+                "enable_reverse": true
+            }
+    ]
   }
 }
