@@ -1,6 +1,9 @@
 #include "HealthController.h"
 
-void HealthController::asyncHandleHttpRequest(const HttpRequestPtr& req, std::function<void (const HttpResponsePtr &)> &&callback)
+void HealthController::health(const HttpRequestPtr& req, std::function<void(const HttpResponsePtr&)>&&callback)
 {
-    // write your application logic here
+    Json::Value ret;
+    ret["result"] = "ok";
+    std::shared_ptr<HttpResponse> response = handleResponse(ret, k200OK);
+    callback(response);
 }
