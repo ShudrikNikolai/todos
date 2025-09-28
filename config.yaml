@@ -172,7 +172,7 @@ app:
   # Load_dynamic_views: False by default, when set to true, drogon
   # compiles and loads dynamically "CSP View Files" in directories defined
   # by "dynamic_views_path"
-  load_dynamic_views: false
+  load_dynamic_views: true
   # dynamic_views_path: If the path isn't prefixed with /, ./ or ../,
   # it is relative path of document_root path
   dynamic_views_path:

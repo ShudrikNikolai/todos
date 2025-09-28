@@ -1,0 +1,78 @@
+<% layout "layout.csp" %>
+<% title="Вход в систему" %>
+
+<div class="auth-card">
+    <div class="auth-header">
+        <h2><i class="fas fa-sign-in-alt me-2"></i>Вход</h2>
+        <p class="mb-0">Добро пожаловать обратно!</p>
+    </div>
+    
+    <div class="auth-body">
+        <% if (error) { %>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i><%= error %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <% } %>
+        
+        <% if (success) { %>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle me-2"></i><%= success %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <% } %>
+        
+        <form id="loginForm" action="/auth/login" method="POST" onsubmit="return validateForm('loginForm')">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email адрес</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    <input type="email" class="form-control" id="email" name="email" 
+                           value="<%= email || "" %>" required placeholder="your@email.com">
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="password" class="form-label">Пароль</label>
+                <div class="position-relative">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <input type="password" class="form-control" id="password" name="password" 
+                               required placeholder="Введите пароль">
+                    </div>
+                    <span class="password-toggle" onclick="togglePassword('password')">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                </div>
+            </div>
+            
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                <label class="form-check-label" for="remember">Запомнить меня</label>
+                <a href="/auth/forgot-password" class="float-end">Забыли пароль?</a>
+            </div>
+            
+            <button type="submit" class="btn btn-primary w-100 mb-3">
+                <i class="fas fa-sign-in-alt me-2"></i>Войти
+            </button>
+            
+            <div class="auth-switch">
+                <p class="mb-0">Нет аккаунта? <a href="/auth/register" class="text-decoration-none">Зарегистрироваться</a></p>
+            </div>
+        </form>
+        
+        <hr class="my-4">
+        
+        <div class="text-center">
+            <p class="text-muted">Или войдите с помощью</p>
+            <div class="d-grid gap-2">
+                <button type="button" class="btn btn-outline-danger">
+                    <i class="fab fa-google me-2"></i>Google
+                </button>
+                <button type="button" class="btn btn-outline-primary">
+                    <i class="fab fa-facebook me-2"></i>Facebook
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
