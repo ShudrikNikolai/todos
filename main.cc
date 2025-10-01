@@ -2,7 +2,13 @@
 
 int main()
 {
-    drogon::app().loadConfigFile("../config.yaml");
+    const char* configPath = std::getenv("CONFIG_PATH");
+    if (!configPath) {
+        configPath = "../config.yaml";
+    }
+    
+    drogon::app().loadConfigFile(configPath);
+    
     drogon::app().registerHandler(
         "/",
         [](const drogon::HttpRequestPtr& request, std::function<void(const drogon::HttpResponsePtr&)>&& callback) {

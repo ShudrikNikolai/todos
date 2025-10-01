@@ -17,8 +17,8 @@ namespace api
         {
           public:
             METHOD_LIST_BEGIN
-            // api/v2/todos/
-            METHOD_ADD(todos::get, "/", HttpMethod::Get);
+            // api/v2/todos/counts
+            METHOD_ADD(todos::get, "/counts", HttpMethod::Get);
             METHOD_LIST_END
 
             void get(const HttpRequestPtr& req, std::function<void(const HttpResponsePtr&)>&& callback);

@@ -1,4 +1,9 @@
-build/
+build
 !build/dist/
 docs
 scripts
+.vscode
+.idea
+.git/
+.gitignore
+logs

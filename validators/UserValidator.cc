@@ -1,5 +1,5 @@
 #include "UserValidator.h"
-// TODO
+
 #include <cctype>
 #include <regex>
 #include <string>

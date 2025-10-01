@@ -6,7 +6,6 @@
 
 using namespace api::v1;
 
-// Add definition of your processing function here
 using namespace drogon;
 using namespace drogon::orm;
 using namespace drogon_model::postgres;
@@ -23,7 +22,6 @@ void users::connect()
     client = app().getDbClient();
 }
 
-//? GET /users/
 void users::get(const HttpRequestPtr& req, std::function<void(const HttpResponsePtr&)>&& callback)
 {
     connect();
@@ -82,7 +80,6 @@ void users::get(const HttpRequestPtr& req, std::function<void(const HttpResponse
     }
 }
 
-//? GET /users/{id}
 void users::getOne(const HttpRequestPtr& req, std::function<void(const HttpResponsePtr&)>&& callback, int userId)
 {
     connect();
@@ -131,7 +128,6 @@ void users::getOne(const HttpRequestPtr& req, std::function<void(const HttpRespo
     }
 }
 
-//? PUT /users/{id}
 void users::updateOne(const HttpRequestPtr& req, std::function<void(const HttpResponsePtr&)>&& callback, int userId)
 {
     connect();
@@ -190,7 +186,6 @@ void users::updateOne(const HttpRequestPtr& req, std::function<void(const HttpRe
     }
 }
 
-//? DELETE /users/{id}
 void users::deleteOne(const HttpRequestPtr& req, std::function<void(const HttpResponsePtr&)>&& callback, int userId)
 {
     std::string method = req->methodString();
@@ -243,7 +238,6 @@ void users::deleteOne(const HttpRequestPtr& req, std::function<void(const HttpRe
     }
 }
 
-//? GET /me
 void users::getMe(const HttpRequestPtr& req, std::function<void(const HttpResponsePtr&)>&& callback)
 {
     std::string method = req->methodString();
@@ -296,7 +290,6 @@ void users::getMe(const HttpRequestPtr& req, std::function<void(const HttpRespon
     }
 }
 
-//? PUT /me
 void users::updateMe(const HttpRequestPtr& req, std::function<void(const HttpResponsePtr&)>&& callback)
 {
     connect();
@@ -357,7 +350,6 @@ void users::updateMe(const HttpRequestPtr& req, std::function<void(const HttpRes
     }
 }
 
-//? DELETE /me
 void users::deleteMe(const HttpRequestPtr& req, std::function<void(const HttpResponsePtr&)>&& callback)
 {
     std::string method = req->methodString();

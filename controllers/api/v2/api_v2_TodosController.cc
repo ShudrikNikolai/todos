@@ -4,26 +4,18 @@
 
 using namespace api::v2;
 
-// Add definition of your processing function here
-
 using namespace drogon;
 using namespace drogon::orm;
 using namespace drogon_model::postgres;
 
 void todos::connect()
 {
-    LOG_DEBUG << "todos connect #1: ";
-
     client = app().getDbClient();
 }
 
 void todos::get(const HttpRequestPtr& req, std::function<void(const HttpResponsePtr&)>&& callback)
 {
-    LOG_DEBUG << "Received request #1: ";
-
     connect();
-
-    LOG_DEBUG << "Received request #2: ";
 
     if (client)
     {

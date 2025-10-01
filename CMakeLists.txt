@@ -28,7 +28,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Find Drogon
-find_package(Drogon REQUIRED)
+#find_package(Drogon REQUIRED)
 
 # Include directories
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
@@ -131,6 +131,6 @@ target_include_directories(${PROJECT_NAME}
                                    ${CMAKE_CURRENT_SOURCE_DIR}/filters)
 
 # Link libraries - ТЕПЕРЬ ПОСЛЕ add_executable
-target_link_libraries(${PROJECT_NAME} PRIVATE Drogon::Drogon jwt-cpp bcrypt)
-
+#target_link_libraries(${PROJECT_NAME} PRIVATE Drogon::Drogon jwt-cpp bcrypt)
+target_link_libraries(${PROJECT_NAME} PRIVATE jwt-cpp bcrypt)
 # TODO: clean cmake

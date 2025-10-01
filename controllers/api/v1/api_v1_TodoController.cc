@@ -2,7 +2,6 @@
 
 #include "dtos/UserDto.h"
 
-// Add definition of your processing function here
 using namespace api::v1;
 using namespace drogon;
 using namespace drogon::orm;
@@ -53,7 +52,6 @@ void todos::create(const HttpRequestPtr& req, std::function<void(const HttpRespo
     }
 }
 
-//
 void todos::get(const HttpRequestPtr& req, std::function<void(const HttpResponsePtr&)>&& callback)
 {
     connect();

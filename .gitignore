@@ -1,2 +1,7 @@
 # Build
 build
+
+# Logs
+logs
+
+init.sql
