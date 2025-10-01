@@ -1,6 +1,9 @@
 #include "TodoViewController.h"
 
-void TodoViewController::asyncHandleHttpRequest(const HttpRequestPtr& req, std::function<void (const HttpResponsePtr &)> &&callback)
+void TodoViewController::todo(const HttpRequestPtr& req, std::function<void(const HttpResponsePtr&)>&& callback)
 {
-    // write your application logic here
+    HttpViewData data;
+    data["name"] = req->getParameter("name");
+    auto resp = HttpResponse::newHttpViewResponse("todos", data);
+    callback(resp);
 }

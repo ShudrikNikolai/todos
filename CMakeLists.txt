@@ -9,7 +9,6 @@ project(todo_backend)
 # target_link_libraries(${PROJECT_NAME} PRIVATE drogon)
 # -----------------------------------------------------------------------------
 
-
 include(CheckIncludeFileCXX)
 
 check_include_file_cxx(any HAS_ANY)
@@ -39,15 +38,64 @@ set(SRC_FILES
     main.cc
 )
 
-# Create executable
-add_executable(${PROJECT_NAME} ${SRC_FILES})
+##########
+# https://github.com/Thalhammer/jwt-cpp
+# project config.cmake installs onto wrong dir
+# had to be linked locally
+add_subdirectory(external/jwt-cpp)
+##########
 
+##########
+# https://github.com/trusch/libbcrypt
+# project doesn't have config.cmake file
+# linking locally is easier
+add_subdirectory(external/libbcrypt)
+##########
+
+# Сначала собираем все исходные файлы
 # Controllers
 aux_source_directory(controllers CTL_SRC)
+aux_source_directory(controllers/views CTL_SRC)
 aux_source_directory(controllers/api/v1 CTL_SRC)
 aux_source_directory(controllers/api/v2 CTL_SRC)
 
+# Dto
+aux_source_directory(dtos DTO_SRC)
 
+# Helpers
+aux_source_directory(helpers HELPER_SRC)
+
+# Utils
+aux_source_directory(utils UTIL_SRC)
+
+# Validators
+aux_source_directory(validators VALIDATOR_SRC)
+
+# Plugins
+aux_source_directory(plugins PLUGIN_SRC)
+
+# Models
+aux_source_directory(models MODEL_SRC)
+
+# Filters
+aux_source_directory(filters FILTER_SRC)
+
+# Добавляем все исходные файлы в SRC_FILES
+list(APPEND SRC_FILES
+    ${CTL_SRC}
+    ${DTO_SRC}
+    ${HELPER_SRC}
+    ${UTIL_SRC}
+    ${VALIDATOR_SRC}
+    ${FILTER_SRC}
+    ${PLUGIN_SRC}
+    ${MODEL_SRC}
+)
+
+# Create executable - ПОСЛЕ СБОРА ВСЕХ ИСХОДНЫХ ФАЙЛОВ
+add_executable(${PROJECT_NAME} ${SRC_FILES})
+
+# Настройка views
 drogon_create_views(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/views
                     ${CMAKE_CURRENT_BINARY_DIR})
 # use the following line to create views with namespaces.
@@ -58,17 +106,31 @@ drogon_create_views(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/views
 # drogon_create_views(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/views
 #                     ${CMAKE_CURRENT_BINARY_DIR} TRUE CHANGE_ME)
 
-target_include_directories(${PROJECT_NAME}
-                           PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
-                                   ${CMAKE_CURRENT_SOURCE_DIR}/models)
-
 target_sources(${PROJECT_NAME}
                PRIVATE
                ${SRC_DIR}
                ${CTL_SRC}
                ${FILTER_SRC}
                ${PLUGIN_SRC}
-               ${MODEL_SRC})
+               ${MODEL_SRC}
+               ${VALIDATOR_SRC}
+               ${UTIL_SRC}
+               ${HELPER_SRC}
+               ${DTO_SRC})
 
-# Link Drogon
-target_link_libraries(${PROJECT_NAME} Drogon::Drogon)
+# Директории include
+target_include_directories(${PROJECT_NAME}
+                           PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
+                                   ${CMAKE_CURRENT_SOURCE_DIR}/models
+                                   ${CMAKE_CURRENT_SOURCE_DIR}/controllers
+                                   ${CMAKE_CURRENT_SOURCE_DIR}/dtos
+                                   ${CMAKE_CURRENT_SOURCE_DIR}/helpers
+                                   ${CMAKE_CURRENT_SOURCE_DIR}/utils
+                                   ${CMAKE_CURRENT_SOURCE_DIR}/validators
+                                   ${CMAKE_CURRENT_SOURCE_DIR}/plugins
+                                   ${CMAKE_CURRENT_SOURCE_DIR}/filters)
+
+# Link libraries - ТЕПЕРЬ ПОСЛЕ add_executable
+target_link_libraries(${PROJECT_NAME} PRIVATE Drogon::Drogon jwt-cpp bcrypt)
+
+# TODO: clean cmake

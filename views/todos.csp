@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои задачи</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .todo-form {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .delete-btn {
+            background: #dc3545;
+        }
+        .delete-btn:hover {
+            background: #c82333;
+        }
+        .toggle-btn {
+            background: #28a745;
+        }
+        .toggle-btn:hover {
+            background: #218838;
+        }
+        .todo-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .completed {
+            background: #f8f9fa;
+            text-decoration: line-through;
+            color: #6c757d;
+        }
+        .todo-actions {
+            margin-top: 10px;
+        }
+        .todo-actions button {
+            margin-right: 5px;
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Мой список дел</h1>
+    
+    <div class="todo-form">
+        <h3>Добавить новое дело</h3>
+        <form id="addTodoForm">
+            <div class="form-group">
+                <label>Название:</label>
+                <input type="text" name="title" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Описание:</label>
+                <textarea name="description" rows="3"></textarea>
+            </div>
+            
+            <button type="submit">Добавить</button>
+        </form>
+    </div>
+    
+    <div id="todosList">
+        <h3>Список дел:</h3>
+        <!-- Сюда будут добавляться дела -->
+    </div>
+
+    <script>
+        // Загрузка дел при загрузке страницы
+        document.addEventListener('DOMContentLoaded', loadTodos);
+        
+        // Добавление нового дела
+        document.getElementById('addTodoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = {
+                title: formData.get('title'),
+                description: formData.get('description')
+            };
+            
+            fetch('/api/v1/todos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Дело добавлено:', data);
+                this.reset();
+                loadTodos();
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка добавления дела');
+            });
+        });
+        
+        // Загрузка списка дел
+        function loadTodos() {
+            fetch('/api/v1/todos')
+                .then(response => response.json())
+                .then(todos => {
+                    displayTodos(todos);
+                })
+                .catch(error => {
+                    console.error('Ошибка загрузки дел:', error);
+                });
+        }
+        
+        // Отображение списка дел
+        function displayTodos(todos) {
+            const todosList = document.getElementById('todosList');
+            todosList.innerHTML = '<h3>Список дел:</h3>';
+            
+            if (!todos || todos.length === 0) {
+                todosList.innerHTML += '<p>Нет дел</p>';
+                return;
+            }
+            
+            todos.forEach(todo => {
+                const todoElement = document.createElement('div');
+                todoElement.className = `todo-item ${todo.completed ? 'completed' : ''}`;
+                todoElement.innerHTML = `
+                    <h4>${todo.title}</h4>
+                    <p>${todo.description || ''}</p>
+                    <div class="todo-actions">
+                        <button class="toggle-btn" onclick="toggleTodo(${todo.id})">
+                            ${todo.completed ? 'Возобновить' : 'Выполнить'}
+                        </button>
+                        <button class="delete-btn" onclick="deleteTodo(${todo.id})">Удалить</button>
+                    </div>
+                `;
+                todosList.appendChild(todoElement);
+            });
+        }
+        
+        // Переключение статуса выполнения
+        function toggleTodo(id) {
+            fetch(`/api/todos/${id}/toggle`, {
+                method: 'PATCH'
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Статус обновлен:', data);
+                loadTodos();
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка обновления статуса');
+            });
+        }
+        
+        // Удаление дела
+        function deleteTodo(id) {
+            if (!confirm('Удалить это дело?')) return;
+            
+            fetch(`/api/v1/todos/${id}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Дело удалено:', data);
+                loadTodos();
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка удаления дела');
+            });
+        }
+    </script>
+</body>
+</html>

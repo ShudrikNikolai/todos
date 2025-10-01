@@ -40,7 +40,7 @@ db_clients:
     # port: Server port, 5432 by default
     port: 5432
     # dbname: Database name
-    dbname: drogon
+    dbname: postgres
     # user: 'postgres' by default
     user: 'lstfng'
     # passwd: '' by default
@@ -175,8 +175,8 @@ app:
   load_dynamic_views: true
   # dynamic_views_path: If the path isn't prefixed with /, ./ or ../,
   # it is relative path of document_root path
-  dynamic_views_path:
-    - ./views
+  #dynamic_views_path:
+  #  - ./views
   # dynamic_views_output_path: Default by an empty string which means the output path of source 
   # files is the path where the csp files locate. If the path isn't prefixed with /, it is relative 
   # path of the current working directory.
@@ -198,10 +198,10 @@ app:
     # use_spdlog: Use spdlog library to log
     use_spdlog: false
     # log_path: Log file path,empty by default,in which case,logs are output to the stdout
-    # log_path: ./
+    log_path: './'
     # logfile_base_name: Log file base name,empty by default which means drogon names logfile as
     # drogon.log ...
-    logfile_base_name: ''
+    logfile_base_name: 'todos'
     # log_size_limit: 100000000 bytes by default,
     # When the log file size reaches "log_size_limit", the log file is switched.
     log_size_limit: 100000000
@@ -214,7 +214,7 @@ app:
     # display_local_time: false by default, if true, the log time is displayed in local time
     display_local_time: false
   # run_as_daemon: False by default
-  run_as_daemon: true
+  run_as_daemon: false
   # handle_sig_term: True by default
   handle_sig_term: true
   # relaunch_on_error: False by default, if true, the program will be restart by the parent after exiting;
@@ -309,5 +309,14 @@ plugins:
       # show_microseconds: true
       # custom_time_format: ''
       # use_real_ip: false
+  - name: JwtPlugin
+    dependencies: []
+    config:
+      jwt-secret: secret
+      jwt-sessionTime: 3600
+      jwt-issuer: localhost:4000
 # custom_config: custom configuration for users. This object can be get by the app().getCustomConfig() method. 
-custom_config: {}
+custom_config: {
+  "jwt-secret":"secret",
+  "jwt-sessionTime":3600
+}

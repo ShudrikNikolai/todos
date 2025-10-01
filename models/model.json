@@ -2,20 +2,21 @@
   "rdbms": "postgresql",
   "host": "127.0.0.1",
   "port": 5432,
-  "dbname": "drogon",
+  "dbname": "postgres",
   "schema": "public",
   "user": "lstfng",
   "password": "lstfng",
+  "tables": [],
   "relationships": {
     "enabled": false,
     "items": [
             {
                 "type": "has many",
-                "original_table_name": "users",
+                "original_table_name": "user_",
                 "original_table_alias": "user",
                 "original_key": "id",
-                "target_table_name": "todos",
-                "target_table_alias": "todo",
+                "target_table_name": "todo",
+                "target_table_alias": "todos",
                 "target_key": "user_id",
                 "enable_reverse": true
             }

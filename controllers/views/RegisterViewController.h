@@ -1,15 +1,15 @@
 #pragma once
 
-#include <drogon/HttpSimpleController.h>
+#include "BaseController.h"
 
-using namespace drogon;
+#include <drogon/HttpController.h>
 
-class RegisterViewController : public drogon::HttpSimpleController<RegisterViewController>
+class RegisterViewController final : public drogon::HttpController<RegisterViewController>, public BaseController
 {
   public:
-    void asyncHandleHttpRequest(const HttpRequestPtr& req, std::function<void (const HttpResponsePtr &)> &&callback) override;
-    PATH_LIST_BEGIN
-    // list path definitions here;
-    // PATH_ADD("/path", "filter1", "filter2", HttpMethod1, HttpMethod2...);
-    PATH_LIST_END
+    METHOD_LIST_BEGIN
+    ADD_METHOD_TO(RegisterViewController::reg, "/register", drogon::HttpMethod::Get);
+    METHOD_LIST_END
+
+    void reg(const drogon::HttpRequestPtr& req, std::function<void(const drogon::HttpResponsePtr&)>&& callback);
 };

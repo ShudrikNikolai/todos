@@ -1,22 +1,32 @@
 #pragma once
 
-#include <drogon/HttpSimpleController.h>
+#include "BaseController.h"
+#include "models/Todo.h"
+
+#include <drogon/HttpController.h>
 
 using namespace drogon;
+using namespace drogon::orm;
+using namespace drogon_model::postgres;
 
 namespace api
 {
     namespace v2
     {
-        class TodosController : public drogon::HttpSimpleController<TodosController>
+        class todos final : public drogon::HttpController<todos>, public BaseController
         {
           public:
-            void asyncHandleHttpRequest(const HttpRequestPtr& req,
-                                        std::function<void(const HttpResponsePtr&)>&& callback) override;
-            PATH_LIST_BEGIN
-            // list path definitions here;
-            // PATH_ADD("/path", "filter1", "filter2", HttpMethod1, HttpMethod2...);
-            PATH_LIST_END
+            METHOD_LIST_BEGIN
+            // api/v2/todos/
+            METHOD_ADD(todos::get, "/", HttpMethod::Get);
+            METHOD_LIST_END
+
+            void get(const HttpRequestPtr& req, std::function<void(const HttpResponsePtr&)>&& callback);
+
+          private:
+            DbClientPtr client;
+
+            void connect();
         };
     }  // namespace v2
 }  // namespace api

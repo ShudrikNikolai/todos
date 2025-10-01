@@ -1,15 +1,16 @@
 #pragma once
 
-#include <drogon/HttpSimpleController.h>
-
+#include "../../filters/LoginFilter.h"
+#include "BaseController.h"
+// WORK!!!!!!!!!
+#include <drogon/HttpController.h>
 using namespace drogon;
-
-class TodoViewController : public drogon::HttpSimpleController<TodoViewController>
+class TodoViewController : public drogon::HttpController<TodoViewController>
 {
   public:
-    void asyncHandleHttpRequest(const HttpRequestPtr& req, std::function<void (const HttpResponsePtr &)> &&callback) override;
-    PATH_LIST_BEGIN
-    // list path definitions here;
-    // PATH_ADD("/path", "filter1", "filter2", HttpMethod1, HttpMethod2...);
-    PATH_LIST_END
+    METHOD_LIST_BEGIN
+    ADD_METHOD_TO(TodoViewController::todo, "/todo", HttpMethod::Get, "LoginFilter");
+    METHOD_LIST_END
+
+    void todo(const drogon::HttpRequestPtr& req, std::function<void(const drogon::HttpResponsePtr&)>&& callback);
 };

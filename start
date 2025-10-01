@@ -1,9 +1,14 @@
 #!/bin/bash
-
-fuser -k 4000/tcp
+echo "---------- start script ----------"
+echo "----------   kill port  ----------"
+fuser -k 4000/tcp # kill if daemon start
+echo "---------- cleaer build ----------"
 rm -rf build
 mkdir build
 cd ./build
+echo "---------- start build -----------"
 cmake ..
 make
+echo "---------- start daemon ----------"
 ./todo_backend
+echo "--------- daemon started ---------"
