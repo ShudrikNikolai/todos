@@ -1,43 +1,84 @@
-FROM drogonframework/drogon:latest
+FROM ubuntu:24.04
+
+RUN apt-get update && apt-get install -y tzdata
+
+ENV TZ=Europe/Moscow
+
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update && apt-get install -y \
+    build-essential \
+    gcc \
+    g++ \
+    cmake \
     git \
-    libjsoncpp-dev \
-    libssl-dev \
-    libyaml-cpp-dev \
-    zlib1g-dev \
-    libpq-dev \
-    postgresql-all \
+    pkg-config \
     curl \
-    vim \
+    wget \
     && rm -rf /var/lib/apt/lists/*
 
+RUN apt-get update && apt-get install -y \
+    libjsoncpp-dev \
+    libssl-dev \
+    uuid-dev \
+    zlib1g-dev \
+    libsqlite3-dev \
+    libpq-dev \
+    libbrotli-dev \
+    libzstd-dev \
+    libyaml-cpp-dev \
+    postgresql-client \
+    netcat-traditional \
+    && rm -rf /var/lib/apt/lists/*
 
-#RUN git clone https://github.com/Thalhammer/jwt-cpp.git external/jwt-cpp && \
-#    git clone https://github.com/trusch/libbcrypt.git external/libbcrypt
-# RUN ls -la
+RUN echo "=== Cloning Drogon ===" && \
+    git clone https://github.com/drogonframework/drogon /tmp/drogon
 
-COPY . /app
+RUN echo "=== Submodule init ===" && \
+    cd /tmp/drogon && \
+    git submodule update --init && \
+    ls -la
 
-# RUN if [ ! -f "/app/config.yaml" ]; then \
-#         echo "Error: config.yaml not found!" && exit 1; \
-#     fi &&\
-#     cat /app/config.yaml \
-
-RUN rm -rf build && \
+RUN echo "=== Creating build directory ===" && \
+    cd /tmp/drogon && \
     mkdir build && \
-    cd build && \
-    cmake .. && \
-    make
+    ls -la
+
+RUN echo "=== Configuring CMake ===" && \
+    cd /tmp/drogon/build && \
+    cmake -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_CXX_STANDARD=20 \
+          -DBUILD_DOC=OFF \
+          -DBUILD_EXAMPLES=OFF \
+          .. 2>&1 | tee /tmp/cmake_output.log || \
+    (echo "CMake failed. Output:" && cat /tmp/cmake_output.log && exit 1)
+
+RUN echo "=== Checking if Makefile exists ===" && \
+    cd /tmp/drogon/build && \
+    ls -la | head -10
+
+RUN echo "=== Building Drogon ===" && \
+    cd /tmp/drogon/build && \
+    make && make install
+
+RUN echo "=== Cleaning up ===" && \
+    rm -rf /tmp/drogon
+
+RUN echo "=== Drogon Installation Check ===" && \
+    echo "CMake files:" && \
+    find /usr -name "*Drogon*" -type f 2>/dev/null | grep -i cmake || cat /tmp/drogon/build/CMakeFiles/CMakeError.log && \
+    echo "Library files:" && \
+    find /usr -name "*drogon*" -type f 2>/dev/null | head -5 || echo "No Drogon library files found" && \
+    echo "Header files:" && \
+    find /usr -name "drogon.h" -type f 2>/dev/null || echo "Drogon headers not found"
+
+WORKDIR /app
+
+COPY . .
+
+COPY docker-start.sh /app/docker-start.sh
+RUN chmod +x /app/docker-start.sh
 
 EXPOSE 4000
 
-# CMD ["sh", "-c", "if [ -f \"/app/config.yaml\" ]; then \
-#         echo \"Config file found, starting application...\"; \
-#         ./build/todo_backend; \
-#     else \
-#         echo \"Error: Config file not found at /app/config.yaml\"; \
-#         exit 1; \
-#     fi"]
-
-CMD ["./build/todo_backend"]
+CMD ["/app/docker-start.sh"]

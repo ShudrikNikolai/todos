@@ -1,7 +1,4 @@
-build
-!build/dist/
 docs
-scripts
 .vscode
 .idea
 .git/

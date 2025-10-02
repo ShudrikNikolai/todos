@@ -1,0 +1,23 @@
+meta {
+  name: me
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/{{v1}}/users/me
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~Cookie: auth_token={{auth_token}}
+}
+
+headers {
+  Cookie: auth_token={{auth_token}}
+}
+
+settings {
+  encodeUrl: true
+}

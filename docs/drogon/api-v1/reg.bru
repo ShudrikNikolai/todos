@@ -1,0 +1,29 @@
+meta {
+  name: reg
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/{{v1}}/auth/register
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "first_name": {{defaultVar}},
+    "last_name": {{defaultVar}},
+    "email": {{defaultVar}},
+    "password": {{defaultVar}},
+    "confirmPassword": {{defaultVar}}
+  }
+}
+
+vars:post-response {
+  auth_token: data?.auth_token
+}
+
+settings {
+  encodeUrl: true
+}

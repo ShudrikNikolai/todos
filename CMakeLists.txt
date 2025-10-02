@@ -27,8 +27,9 @@ endif ()
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Find Drogon
-#find_package(Drogon REQUIRED)
+# Find Package 
+find_package(Drogon REQUIRED)
+find_package(Jsoncpp REQUIRED)
 
 # Include directories
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
@@ -96,8 +97,8 @@ list(APPEND SRC_FILES
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 
 # Настройка views
-drogon_create_views(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/views
-                    ${CMAKE_CURRENT_BINARY_DIR})
+#drogon_create_views(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/views
+#                    ${CMAKE_CURRENT_BINARY_DIR})
 # use the following line to create views with namespaces.
 # drogon_create_views(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/views
 #                     ${CMAKE_CURRENT_BINARY_DIR} TRUE)
@@ -130,7 +131,4 @@ target_include_directories(${PROJECT_NAME}
                                    ${CMAKE_CURRENT_SOURCE_DIR}/plugins
                                    ${CMAKE_CURRENT_SOURCE_DIR}/filters)
 
-# Link libraries - ТЕПЕРЬ ПОСЛЕ add_executable
-#target_link_libraries(${PROJECT_NAME} PRIVATE Drogon::Drogon jwt-cpp bcrypt)
-target_link_libraries(${PROJECT_NAME} PRIVATE jwt-cpp bcrypt)
-# TODO: clean cmake
+target_link_libraries(${PROJECT_NAME} PRIVATE Drogon::Drogon jwt-cpp bcrypt)

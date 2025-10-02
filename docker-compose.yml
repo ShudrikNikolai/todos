@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   drogon-app:
+    container_name: "drogon-app"
     build:
       context: .
       dockerfile: Dockerfile
@@ -12,7 +13,7 @@ services:
     volumes:
       - ./logs:/app/logs
       - ./config.yaml:/app/config.yaml:ro
-      #- ./:/app/.
+      - ./:/app
     environment:
       - CONFIG_PATH=/app/config.yaml
     restart: no
@@ -22,15 +23,19 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+    networks:
+      - drogon_network
+
   drogon-db:
     image: postgres:15-alpine
+    container_name: "drogon-db"
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=lstfng
       - POSTGRES_PASSWORD=lstfng
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/01-init.sql
     ports:
       - "5432:5432"
     restart: no
@@ -39,6 +44,12 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - drogon_network
 
 volumes:
   postgres_data:
+
+networks:
+  daily_express_network:
+    driver: bridge

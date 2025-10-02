@@ -8,7 +8,8 @@ int main()
     }
     
     drogon::app().loadConfigFile(configPath);
-    
+
+    // drogon::app().createDbClient("postgresql", "drogon-db", 5432, "postgres", "lstfng", "lstfng", 1, "default");
     drogon::app().registerHandler(
         "/",
         [](const drogon::HttpRequestPtr& request, std::function<void(const drogon::HttpResponsePtr&)>&& callback) {
