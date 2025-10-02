@@ -36,7 +36,7 @@ db_clients:
     # filename: Sqlite3 db file name
     # filename: ''
     # host: Server address,localhost by default
-    host: drogon-db
+    host: drogon-db #127.0.0.1
     # port: Server port, 5432 by default
     port: 5432
     # dbname: Database name
